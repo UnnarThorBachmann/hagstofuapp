@@ -25,7 +25,7 @@ const styles = theme => ({
   },
 });
 
-class Artal extends React.Component {
+class Laun extends React.Component {
   
 
   handleChange = event => {
@@ -33,20 +33,21 @@ class Artal extends React.Component {
   };
  
   render() {
-    const { classes, artal} =this.props;
+    const { classes, laun} =this.props;
 
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <InputLabel>Ártal</InputLabel>
+          <InputLabel>Laun/Greiddar stundir</InputLabel>
           <Select
-            value={artal}
+            value={laun}
             onChange={this.handleChange}
           >
-            <MenuItem value={"2014"}>2014</MenuItem>
-            <MenuItem value={"2015"}>2015</MenuItem>
-            <MenuItem value={"2016"}>2016</MenuItem>
-            <MenuItem value={"2017"}>2017</MenuItem>
+            <MenuItem value={"grunnlaun"}>Grunnlaun</MenuItem>
+            <MenuItem value={"regluleg laun"}>Regluleg laun</MenuItem>
+            <MenuItem value={"regluleg heildarlaun"}>Regluleg heildarlaun</MenuItem>
+            <MenuItem value={"heildarlaun"}>Heildarlaun</MenuItem>
+            <MenuItem value={"greiddar stundir"}>Greiddar stundir</MenuItem>
           </Select>
         </FormControl>
       </form>
@@ -54,8 +55,8 @@ class Artal extends React.Component {
   }
 }
 
-Artal.propTypes = {
+Laun.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Artal);
+export default withStyles(styles)(Laun);
