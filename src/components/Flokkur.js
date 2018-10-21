@@ -14,11 +14,11 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    width: 700
+    width: 550
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 600,
+    minWidth: 300,
     maxWidth: 600,
   },
   chips: {

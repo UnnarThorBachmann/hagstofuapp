@@ -208,6 +208,6 @@ export const flokkar = {
 		"Störf verkafólks í iðnaði og fiskvinnslu": 932,
 		"Störf verkafólks við handsamsetningu og -flokkun - almennt starfsfólk": 9321,
 		"Störf verkafólks í fiskiðnaði - almennt starfsfólk": 9322,
-		"Störf verkafólks við flutninga og vörugeymslu - almennt starfsfólk": 9330
+		"Störf verkafólks við flutninga og vörugeymslu - flokksstjórar": 9330
 	}
 };
