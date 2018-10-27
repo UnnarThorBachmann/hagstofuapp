@@ -6,7 +6,7 @@ import Laun from '../components/Laun.js';
 import {Line,Scatter} from 'react-chartjs-2';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {d, flokkar} from '../helpers/index.js';
+import {d,d2, flokkar} from '../helpers/index.js';
 
 const theme = createMuiTheme({
   typography: {
@@ -43,6 +43,14 @@ const launthegahopur = {
   'Opinberir starfsmenn - starfsmenn sveitarfélaga': 4,
 };
 
+const launthegahopur_rev = {
+  0: 'Alls',
+  1: 'Starfsmenn á almennum vinnumarkaði',  
+  2: 'Opinberir starfsmenn - alls',
+  3: 'Opinberir starfsmenn - ríkisstarfsmenn', 
+  4: 'Opinberir starfsmenn - starfsmenn sveitarfélaga'
+};
+
 const stett = {
   'Alls ': 0,
   'Stjórnendur (1)': 1,
@@ -55,6 +63,20 @@ const stett = {
   'Ósérhæft starfsfólk (9)': 8,
   'Iðnaðarmenn': 9,
   'Verkafólk': 10
+};
+
+const stett_rev = {
+  0: 'Alls ',
+  1: 'Stjórnendur (1)',
+  2: 'Sérfræðingar (2)',
+  3: 'Tæknar og sérmenntað starfsfólk (3)',
+  4: 'Skrifstofufólk (4)',
+  5: 'Þjónustu-, sölu- og afgreiðslufólk (5)',
+  6: 'Iðnaðarmenn og sérhæft iðnverkafólk (7)',
+  7: 'Véla- og vélgæslufólk (8)',
+  8: 'Ósérhæft starfsfólk (9)',
+  9: 'Iðnaðarmenn',
+  10: 'Verkafólk'
 };
 
 const kyn = {
@@ -74,11 +96,26 @@ const launaflokkar = {
 
 };
 
+const launaflokkarKennara = {
+  'grunnlaunAlls': 'grunnlaun',
+  'grunnlaunFullvinnandi': 'grunnlaun',
+  'reglulegLaunAlls': 'regluleg laun',
+  'reglulegLaunFullvinnandi': 'regluleg laun',
+  'reglulegHeildarlaunFullvinnandi':'regluleg heildarlaun',
+  'heildarlaun': 'heildarlaun',
+  'greiddarStundirFullvinnandi': 'greiddar stundir'
+
+};
+
 class Card3 extends Component {
   state = {
     artal: "2017",
     laun: "grunnlaunAlls",
-    valdir: {},
+    valdir: {
+      'Kyn': [], 
+      'Stétt': [],
+      'Launþegahópur': []
+    },
     haed: 100
   }
   change = (name, value) => {
@@ -105,20 +142,31 @@ class Card3 extends Component {
     const {artal,valdir,laun} = this.state;
     const kennarar = "Kennsla á framhaldsskólastigi";
     const kennarar_nr = 2320;
-    console.log(valdir);
+    console.log('valdir',valdir);
+    const stett_sia = valdir['Stétt'].map(item=> stett[item]);
+    const kyn_sia = valdir['Kyn'];
+    const launthegahopur_sia = valdir['Launþegahópur'].map(item=> launthegahopur[item]); 
+    
+    
+    let d2_listi = Object.keys(d2).map(item=> d2[item]);
+    d2_listi = d2_listi.filter(item=> item.ar === artal);
+  
+    d2_listi = d2_listi.filter(item=> launthegahopur_sia.indexOf(item.launthegahopur) !==-1);
+    
+    d2_listi = d2_listi.filter(item=> stett_sia.indexOf(item.stett) !==-1);
 
-
-    const valdir_listi = [];
-    /*Object.keys(valdir).reduce((acc,curr)=>{
-
-      return acc.concat(valdir[curr].map(item=>{
-        return {0: curr, 1: item}}));
-    },[]);*/
+    d2_listi = d2_listi.filter(item=> kyn_sia.indexOf(item.kyn) !==-1);
+    
+    d2_listi = d2_listi.map(item=> {
+      return {'kyn': item.kyn, 'stétt': item.stett, 'launþegahópur': item.launthegahopur, 'laun': item[laun]}
+    });
+    
+    
     const labels = ["q1", "midgildi", "medaltal", "q3"] ;
-    /*
+    
     const datasets0= [{
           label: `${artal}-${laun}-${kennarar}` ,
-          data: labels.map(item=> d[artal][kennarar_nr][laun][item]),
+          data: labels.map(item=> d[artal][kennarar_nr][launaflokkarKennara[laun]][item]),
           fill: false,
           borderColor: 'red',
           pointBorderColor: 'red',
@@ -128,19 +176,18 @@ class Card3 extends Component {
           pointBorderWidth: 2,
           pointStyle: 'circle'
         }];
-    */
-    /*
+    
+    console.log(d2_listi);
+    const valdir_listi = d2_listi;
     const datasets = valdir_listi.reduce((acc,curr)=> {
-      if (typeof d[artal][flokkar[curr[0]][curr[1]]] === 'undefined') 
-        return acc;
-      else
+        console.log(curr);
         return acc.concat(
           [{
-            label: `${artal}-${laun}-${curr[1]}` ,
-            data: labels.map(item=> d[artal][flokkar[curr[0]][curr[1]]][laun][item]),
+            label: `${artal}-${launaflokkar[laun]}-${stett_rev[curr['stétt']]}-${launthegahopur_rev[curr['launþegahópur']]}-${curr.kyn}` ,
+            data: labels.map(item=> curr.laun[item]),
             fill: false,
-            borderColor: litir[curr[0]],
-            pointBorderColor: litir[curr[0]],
+            borderColor: 'black',
+            pointBorderColor: 'black',
             pointRadius: 5,
             pointHoverRadius: 15,
             pointHitRadius: 30,
@@ -153,7 +200,7 @@ class Card3 extends Component {
     let data= {
         labels: ['Neðri fjórðungsmörk', 'Miðgildi', 'Meðaltal', "Efri fjórðungsmörk"],
         datasets: datasets
-    }*/
+    }
     
 
 
@@ -171,8 +218,7 @@ class Card3 extends Component {
       </div>
       
         <div style={{padding: '2%'}}>
-
-        
+          <Line data={data} height={130} width={300} />
         </div>
         
       </div>
