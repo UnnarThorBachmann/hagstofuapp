@@ -19,7 +19,7 @@ function Bar(props) {
       <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h6" color="inherit">
-            Launasamanburður 2014-2017
+            Launasamanburður 2014-2017 (af vef Hagstofunnar)
           </Typography>
         </Toolbar>
       </AppBar>
