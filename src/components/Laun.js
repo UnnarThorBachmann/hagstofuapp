@@ -28,7 +28,7 @@ class Laun extends React.Component {
   };
  
   render() {
-    const { classes, laun} =this.props;
+    const { classes, laun,launaflokkar} =this.props;
 
     return (
       <form className={classes.root} autoComplete="off">
@@ -38,11 +38,12 @@ class Laun extends React.Component {
             value={laun}
             onChange={this.handleChange}
           >
-            <MenuItem value={"grunnlaun"}>Grunnlaun</MenuItem>
-            <MenuItem value={"regluleg laun"}>Regluleg laun</MenuItem>
-            <MenuItem value={"regluleg heildarlaun"}>Regluleg heildarlaun</MenuItem>
-            <MenuItem value={"heildarlaun"}>Heildarlaun</MenuItem>
-            <MenuItem value={"greiddar stundir"}>Greiddar stundir</MenuItem>
+          {
+            Object.keys(launaflokkar).map(item=>
+               <MenuItem key={item} value={`${item}`}>{`${launaflokkar[item]}`}</MenuItem>   
+            )
+          }
+        
           </Select>
         </FormControl>
       </form>

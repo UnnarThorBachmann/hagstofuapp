@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Card1 from './components/Card1.js';
 import Card2 from './components/Card2.js';
+import Card3 from './components/Card3.js';
 
 import Bar from './components/Bar.js';
 
@@ -24,7 +25,7 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <div style={{width: '100%'}}>
         <Bar/>
-        <Card2/>
+        <Card3/>
         </div>
       </MuiThemeProvider>
     );

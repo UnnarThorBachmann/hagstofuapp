@@ -44,6 +44,14 @@ const yfirflokkar_dict = {
   "8": "Störf véla- og vélgæslufólks",
   "9": "Ósérhæfð störf",
 };
+
+const launaflokkar = {     
+  "grunnlaun": "Grunnlaun",
+  "regluleg laun": "Regluleg laun",
+  "regluleg heildarlaun": "Regluleg heildarlaun",
+  "heildarlaun": "Heildarlaun",
+  "greiddar stundir": 'Greiddar stundir'
+};
 class Card1 extends Component {
   state = {
     artal: "2017",
@@ -188,7 +196,7 @@ class Card1 extends Component {
       <div style={{padding: '1%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
         
         <Artal change={this.changeAr} artal={artal}/>
-        <Laun change={this.changeLaun} laun={laun}/>
+        <Laun change={this.changeLaun} laun={laun} launaflokkar={launaflokkar}/>
         {
           Object.keys(flokkar).map(item=>
             <Flokkur key={item} name={item} flokkur={flokkar[item]} change={this.change}/>
