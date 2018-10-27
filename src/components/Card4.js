@@ -3,7 +3,7 @@ import Artal from '../components/Artal.js';
 import Flokkur from '../components/Flokkur.js';
 import Laun from '../components/Laun.js';
 
-import {Line,Scatter} from 'react-chartjs-2';
+import {Scatter} from 'react-chartjs-2';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import {d,d2, flokkar} from '../helpers/index.js';
@@ -107,7 +107,7 @@ const launaflokkarKennara = {
 
 };
 
-class Card3 extends Component {
+class Card4 extends Component {
   state = {
     artal: "2017",
     laun: "grunnlaunAlls",
@@ -139,10 +139,9 @@ class Card3 extends Component {
 
   
   render() {
-    const {artal,valdir,laun} = this.state;
+    const {artal,valdir} = this.state;
     const kennarar = "Kennsla á framhaldsskólastigi";
     const kennarar_nr = 2320;
-    console.log('valdir',valdir);
     const stett_sia = valdir['Stétt'].map(item=> stett[item]);
     const kyn_sia = valdir['Kyn'];
     const launthegahopur_sia = valdir['Launþegahópur'].map(item=> launthegahopur[item]); 
@@ -158,50 +157,60 @@ class Card3 extends Component {
     d2_listi = d2_listi.filter(item=> kyn_sia.indexOf(item.kyn) !==-1);
     
     d2_listi = d2_listi.map(item=> {
-      return {'kyn': item.kyn, 'stétt': item.stett, 'launþegahópur': item.launthegahopur, 'laun': item[laun]}
+      return {'kyn': item.kyn, 
+              'stétt': item.stett, 
+              'launþegahópur': item.launthegahopur, 
+              'grunnlaun': item['grunnlaunAlls'], 
+              'heildarlaun': item['heildarlaun'], 
+              'label': 'Grunnlaun (Alls)'}
     });
     
     
     const labels = ["q1", "midgildi", "medaltal", "q3"] ;
     
-    const datasets0= [{
-          label: `${artal}-${launaflokkarKennara[laun]}-${kennarar}` ,
-          data: labels.map(item=> d[artal][kennarar_nr][launaflokkarKennara[laun]][item]),
-          fill: false,
-          borderColor: 'red',
-          pointBorderColor: 'red',
-          pointRadius: 5,
-          pointHoverRadius: 15,
-          pointHitRadius: 30,
-          pointBorderWidth: 2,
-          pointStyle: 'circle'
-        }];
-    
-    console.log(d2_listi);
     const valdir_listi = d2_listi;
-    const datasets = valdir_listi.reduce((acc,curr)=> {
-        console.log(curr);
-        return acc.concat(
-          [{
-            label: `${artal}-${launaflokkar[laun]}-${stett_rev[curr['stétt']]}-${launthegahopur_rev[curr['launþegahópur']]}-${curr.kyn}` ,
-            data: labels.map(item=> curr.laun[item]),
-            fill: false,
-            borderColor: 'black',
-            pointBorderColor: 'black',
-            pointRadius: 5,
-            pointHoverRadius: 15,
-            pointHitRadius: 30,
-            pointBorderWidth: 0,
-            pointStyle: 'circle'
-          }]
-        );
-    },datasets0); 
-
-    let data= {
-        labels: ['Neðri fjórðungsmörk', 'Miðgildi', 'Meðaltal', "Efri fjórðungsmörk"],
-        datasets: datasets
-    }
+    console.log(valdir_listi);
     
+    const dataHeildGrunn = {
+      labels: valdir_listi.map(item=> item['launþegahópur']),
+      datasets: valdir_listi.map(item=> {
+      console.log(item);
+      return {
+            label: `${stett_rev[item['stétt']]}-${launthegahopur_rev[item['launþegahópur']]}-${item['kyn']}`,
+            fill: false,
+            backgroundColor: 'black',
+            pointBorderColor: 'black',
+            pointBackgroundColor: 'black',
+            pointBorderWidth: 1,
+            pointHoverRadius: 10,
+            pointHoverBackgroundColor: 'black',
+            pointHoverBorderColor: 'black',
+            pointHoverBorderWidth: 2,
+            pointRadius: 10,
+            pointHitRadius: 10,
+            data: [{y: item.heildarlaun.medaltal, x: item.grunnlaun.medaltal}]
+
+        };
+
+      }).concat([
+        {
+            label: kennarar,
+            fill: true,
+            backgroundColor: 'red',
+            pointBorderColor: 'red',
+            pointBackgroundColor: 'red',
+            pointBorderWidth: 1,
+            pointHoverRadius: 10,
+            pointHoverBackgroundColor: 'red',
+            pointHoverBorderColor: 'red',
+            pointHoverBorderWidth: 2,
+            pointRadius: 10,
+            pointHitRadius: 10,
+            data: [{y: d[artal][kennarar_nr].heildarlaun.medaltal, x: d[artal][kennarar_nr].grunnlaun.medaltal}]
+
+        }
+      ])
+    };
 
 
     
@@ -211,14 +220,24 @@ class Card3 extends Component {
       <div style={{padding: '1%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
         
         <Artal change={this.changeAr} artal={artal}/>
-        <Laun change={this.changeLaun} laun={laun} launaflokkar={launaflokkar}/>
+        
         <Flokkur name={'Kyn'} flokkur={kyn} change={this.change}/>
         <Flokkur name={'Stétt'} flokkur={stett} change={this.change}/>
         <Flokkur name={'Launþegahópur'} flokkur={launthegahopur} change={this.change}/>
       </div>
       
         <div style={{padding: '2%'}}>
-          <Line data={data} height={130} width={300} />
+          <Scatter data={dataHeildGrunn} height={130} width={300} options={{
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                  console.log(tooltipItem.datasetIndex);
+                  console.log(data);
+                  return data.datasets[tooltipItem.datasetIndex].label;
+                }
+              }
+            }
+        }}/>
         </div>
         
       </div>
@@ -226,4 +245,4 @@ class Card3 extends Component {
   }
 }
 
-export default Card3;
+export default Card4;

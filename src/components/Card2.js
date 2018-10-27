@@ -81,13 +81,11 @@ class Card1 extends Component {
     },{});
 
 
-    
-    console.log(valdir);
 
     let heildarGrunnData = Object.keys(d[artal]).map(item=> {
       return {yfirflokkar: item.toString()[0],nr: item, heildarlaun: d[artal][item].heildarlaun.medaltal,grunnlaun: d[artal][item].grunnlaun.medaltal };
     });
-    console.log(heildarGrunnData);
+    
     heildarGrunnData = heildarGrunnData.filter(item=> valdir.indexOf(yfirflokkar_dict[item.yfirflokkar])!==-1); 
     const dataHeildGrunnObject0 = Object.keys(yfirflokkar_dict).reduce((acc,curr)=> {return {...acc, [curr]: []};},{});
     
@@ -139,7 +137,6 @@ class Card1 extends Component {
         }
       ])
     };
-    console.log(Object.keys(flokkar));
     return (
       <div>
       <div style={{padding: '1%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
