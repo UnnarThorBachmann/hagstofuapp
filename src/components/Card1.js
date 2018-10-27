@@ -3,16 +3,10 @@ import Artal from '../components/Artal.js';
 import Flokkur from '../components/Flokkur.js';
 import Laun from '../components/Laun.js';
 
-import {Line,Scatter} from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import {d, flokkar} from '../helpers/index.js';
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-});
 
 const litir = {
   "Störf stjórnenda": "rgb(0,0,255)",
@@ -24,16 +18,7 @@ const litir = {
   "Störf véla- og vélgæslufólks": "rgb(0,0,0)",
   "Ósérhæfð störf": 'rgb(128,128,128)',
 };
-const litir_background = {
-  "Störf stjórnenda": "rgb(0,0,255, 0.1)",
-  "Sérfræðistörf": "rgb(255,165,0,0.5)",
-  "Tæknar og sérmenntað starfsfólk": 'rgb(255,255,0,0.5)',
-  "Skrifstofustörf": 'rgb(0,128,0,0.5)',
-  "Þjónustu-, umönnunar- og sölustörf": "rgb(128,0,128,0.5)",
-  "Störf iðnaðarmanna og sérhæfðs iðnverkafólks": "rgb(165,42,42,0.5)",
-  "Störf véla- og vélgæslufólks": "rgb(0,0,0,0.5)",
-  "Ósérhæfð störf": 'rgb(128,128,128,0.5)',
-};
+
 const yfirflokkar_dict = {
   "1": "Störf stjórnenda", 
   "2": "Sérfræðistörf", 
@@ -57,7 +42,6 @@ class Card1 extends Component {
     artal: "2017",
     laun: "grunnlaun",
     valdir: {},
-    haed: 100
   }
   change = (name, value) => {
     
@@ -128,17 +112,13 @@ class Card1 extends Component {
 
   }
   render() {
-    const {artal,valdir,laun, haed} = this.state;
+    const {artal,valdir,laun} = this.state;
     const kennarar = "Kennsla á framhaldsskólastigi";
     const kennarar_nr = 2320;
-    const flokkar_listi = Object.keys(flokkar).reduce((acc,curr)=>{
-      return {...acc, ...flokkar[curr]}; 
-    },{});
     
     
-    const flokkar_vidsnunir = Object.keys(flokkar_listi).reduce((acc,curr)=> {
-      return {...acc, [flokkar_listi[curr]]: curr};
-    },{});
+    
+    
 
 
     const valdir_listi = Object.keys(valdir).reduce((acc,curr)=>{
@@ -184,10 +164,7 @@ class Card1 extends Component {
         labels: ['Neðri fjórðungsmörk', 'Miðgildi', 'Meðaltal', "Efri fjórðungsmörk"],
         datasets: datasets
     }
-    const dataMedaltal = this.firdlistar(d,artal,laun,flokkar_vidsnunir,kennarar_nr,datasets0,labels,'medaltal');
-    const dataMidgildi = this.firdlistar(d,artal,laun,flokkar_vidsnunir,kennarar_nr,datasets0,labels,'midgildi');
-    const dataHeild = this.firdlistar(d,artal,laun,flokkar_vidsnunir,kennarar_nr,datasets0,labels,'heild');
-
+   
 
     
   
@@ -207,18 +184,7 @@ class Card1 extends Component {
         <div style={{padding: '2%'}}>
           <Line data={data} height={130} width={300} />
         </div>
-        <div style={{padding: '2%'}}>
-          <h4>Meðaltalsfirð</h4>
-          <Line data={dataMedaltal} height={130} width={300} />
-        </div>
-        <div style={{padding: '2%'}}>
-          <h4>Miðgildisfirð</h4>
-          <Line data={dataMidgildi} height={130} width={300} />
-        </div>
-         <div style={{padding: '2%'}}>
-          <h4>Heildarfirð</h4>
-          <Line data={dataHeild} height={130} width={300} />
-        </div>
+        
       </div>
     );
   }

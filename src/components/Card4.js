@@ -1,39 +1,13 @@
 import React, { Component } from 'react';
 import Artal from '../components/Artal.js';
 import Flokkur from '../components/Flokkur.js';
-import Laun from '../components/Laun.js';
 
 import {Scatter} from 'react-chartjs-2';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {d,d2, flokkar} from '../helpers/index.js';
+import {d,d2} from '../helpers/index.js';
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-});
 
-const litir = {
-  "Störf stjórnenda": "rgb(0,0,255)",
-  "Sérfræðistörf": "rgb(255,165,0)",
-  "Tæknar og sérmenntað starfsfólk": 'rgb(255,255,0)',
-  "Skrifstofustörf": 'rgb(0,128,0)',
-  "Þjónustu-, umönnunar- og sölustörf": "rgb(128,0,128)",
-  "Störf iðnaðarmanna og sérhæfðs iðnverkafólks": "rgb(165,42,42)",
-  "Störf véla- og vélgæslufólks": "rgb(0,0,0)",
-  "Ósérhæfð störf": 'rgb(128,128,128)',
-};
-const litir_background = {
-  "Störf stjórnenda": "rgb(0,0,255, 0.1)",
-  "Sérfræðistörf": "rgb(255,165,0,0.5)",
-  "Tæknar og sérmenntað starfsfólk": 'rgb(255,255,0,0.5)',
-  "Skrifstofustörf": 'rgb(0,128,0,0.5)',
-  "Þjónustu-, umönnunar- og sölustörf": "rgb(128,0,128,0.5)",
-  "Störf iðnaðarmanna og sérhæfðs iðnverkafólks": "rgb(165,42,42,0.5)",
-  "Störf véla- og vélgæslufólks": "rgb(0,0,0,0.5)",
-  "Ósérhæfð störf": 'rgb(128,128,128,0.5)',
-};
+
 
 const launthegahopur = {
   'Alls': 0,
@@ -85,27 +59,6 @@ const kyn = {
   'Konur': 2
 }
 
-const launaflokkar = {
-  'grunnlaunAlls': 'Grunnlaun (Alls)',
-  'grunnlaunFullvinnandi': 'Grunnlaun (Fullvinnandi)',
-  'reglulegLaunAlls': 'Regluleg laun (Alls)',
-  'reglulegLaunFullvinnandi': 'Regluleg laun (Fullvinnandi)',
-  'reglulegHeildarlaunFullvinnandi':'Regluleg heildarlaun (Fullvinnandi)',
-  'heildarlaun': 'Heildarlaun',
-  'greiddarStundirFullvinnandi': 'Greiddar stundir'
-
-};
-
-const launaflokkarKennara = {
-  'grunnlaunAlls': 'grunnlaun',
-  'grunnlaunFullvinnandi': 'grunnlaun',
-  'reglulegLaunAlls': 'regluleg laun',
-  'reglulegLaunFullvinnandi': 'regluleg laun',
-  'reglulegHeildarlaunFullvinnandi':'regluleg heildarlaun',
-  'heildarlaun': 'heildarlaun',
-  'greiddarStundirFullvinnandi': 'greiddar stundir'
-
-};
 
 class Card4 extends Component {
   state = {
@@ -160,21 +113,18 @@ class Card4 extends Component {
       return {'kyn': item.kyn, 
               'stétt': item.stett, 
               'launþegahópur': item.launthegahopur, 
-              'grunnlaun': item['grunnlaunAlls'], 
+              'grunnlaun': item['grunnlaunFullvinnandi'], 
               'heildarlaun': item['heildarlaun'], 
               'label': 'Grunnlaun (Alls)'}
     });
     
     
-    const labels = ["q1", "midgildi", "medaltal", "q3"] ;
     
     const valdir_listi = d2_listi;
-    console.log(valdir_listi);
     
     const dataHeildGrunn = {
       labels: valdir_listi.map(item=> item['launþegahópur']),
       datasets: valdir_listi.map(item=> {
-      console.log(item);
       return {
             label: `${stett_rev[item['stétt']]}-${launthegahopur_rev[item['launþegahópur']]}-${item['kyn']}`,
             fill: false,
@@ -231,8 +181,7 @@ class Card4 extends Component {
             tooltips: {
               callbacks: {
                 label: function(tooltipItem, data) {
-                  console.log(tooltipItem.datasetIndex);
-                  console.log(data);
+                  
                   return data.datasets[tooltipItem.datasetIndex].label;
                 }
               }

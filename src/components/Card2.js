@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
 import Artal from '../components/Artal.js';
 import Flokkur from '../components/Flokkur.js';
-import Laun from '../components/Laun.js';
 
-import {Line,Scatter} from 'react-chartjs-2';
+import {Scatter} from 'react-chartjs-2';
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import {d, flokkar} from '../helpers/index.js';
 
-const theme = createMuiTheme({
-  typography: {
-    useNextVariants: true,
-  },
-});
+
 
 const litir = {
   "Störf stjórnenda": "rgb(0,0,255)",
@@ -68,7 +62,7 @@ class Card1 extends Component {
   
  
   render() {
-    const {artal,valdir,laun, haed} = this.state;
+    const {artal,valdir} = this.state;
     const kennarar = "Kennsla á framhaldsskólastigi";
     const kennarar_nr = 2320;
     const flokkar_listi = Object.keys(flokkar).reduce((acc,curr)=>{
@@ -162,7 +156,7 @@ class Card1 extends Component {
               callbacks: {
                 label: function(tooltipItem, data) {
                  
-                  var label = data.labels[tooltipItem.index];
+                
                   let i = parseInt(tooltipItem.datasetIndex);
                   if (i===8)
                     i = 2;
