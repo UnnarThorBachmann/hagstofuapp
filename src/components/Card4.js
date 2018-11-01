@@ -177,6 +177,7 @@ class Card4 extends Component {
       </div>
       
         <div style={{padding: '2%'}}>
+          <h2>Heildarlaun (þús. krónur) á móti grunnlaunum (þús. krónur)</h2>
           <Scatter data={dataHeildGrunn} height={130} width={300} options={{
             tooltips: {
               callbacks: {
@@ -185,7 +186,21 @@ class Card4 extends Component {
                   return data.datasets[tooltipItem.datasetIndex].label;
                 }
               }
-            }
+            },
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: 'Meðaltal heildarlauna (þúsund kr.)'
+                }
+              }],
+              xAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: 'Meðaltal grunnlauna (þúsund kr.)'
+                }
+              }]
+            }     
         }}/>
         </div>
         

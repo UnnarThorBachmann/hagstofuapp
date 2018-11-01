@@ -188,7 +188,17 @@ class Card3 extends Component {
       </div>
       
         <div style={{padding: '2%'}}>
-          <Line data={data} height={130} width={300} />
+          <h2>Laun eða greiddar stundir</h2>
+          <Line data={data} height={130} width={300} options={{
+            scales: {
+              yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: `${artal}-${launaflokkar[laun]}`
+                }
+              }]
+            }     
+          }}/>
         </div>
         
       </div>

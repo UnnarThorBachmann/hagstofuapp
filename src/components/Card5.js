@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Artal from '../components/Artal.js';
 import Flokkur from '../components/Flokkur.js';
+import Laun from '../components/Laun.js';
 
 import {Scatter} from 'react-chartjs-2';
 
@@ -38,7 +38,16 @@ const yfirflokkar_dict = {
   "8": "Störf véla- og vélgæslufólks",
   "9": "Ósérhæfð störf",
 };
-class Card2 extends Component {
+
+const launaflokkar = {     
+  "grunnlaun": "Grunnlaun",
+  "regluleg laun": "Regluleg laun",
+  "regluleg heildarlaun": "Regluleg heildarlaun",
+  "heildarlaun": "Heildarlaun",
+  "greiddar stundir": 'Greiddar stundir'
+};
+
+class Card5 extends Component {
   state = {
     artal: "2017",
     laun: "grunnlaun",
@@ -60,15 +69,19 @@ class Card2 extends Component {
     this.setState({artal: ar})
   }
   
+  changeLaun = (laun) => {
+    this.setState({laun: laun})
+  }
+
  
   render() {
-    const {artal,valdir} = this.state;
+    const {artal,valdir,laun} = this.state;
     const kennarar = "Kennsla á framhaldsskólastigi";
     const kennarar_nr = 2320;
     const flokkar_listi = Object.keys(flokkar).reduce((acc,curr)=>{
       return {...acc, ...flokkar[curr]}; 
     },{});
-    
+   
     
     const flokkar_vidsnunir = Object.keys(flokkar_listi).reduce((acc,curr)=> {
       return {...acc, [flokkar_listi[curr]]: curr};
@@ -77,15 +90,22 @@ class Card2 extends Component {
 
 
     let heildarGrunnData = Object.keys(d[artal]).map(item=> {
-      return {yfirflokkar: item.toString()[0],nr: item, heildarlaun: d[artal][item].heildarlaun.medaltal,grunnlaun: d[artal][item].grunnlaun.medaltal };
+      if (d['2014'][item] && d[artal][item])
+        return {yfirflokkar: item.toString()[0],nr: item, x: d['2014'][item][laun].medaltal, y: d[artal][item][laun].medaltal};
+      else
+        return undefined;
     });
     
+    
+    heildarGrunnData = heildarGrunnData.filter(item=> (typeof item !== 'undefined'));
+    
     heildarGrunnData = heildarGrunnData.filter(item=> valdir.indexOf(yfirflokkar_dict[item.yfirflokkar])!==-1); 
+
     const dataHeildGrunnObject0 = Object.keys(yfirflokkar_dict).reduce((acc,curr)=> {return {...acc, [curr]: []};},{});
     
     const dataHeildGrunnObject = heildarGrunnData.reduce((acc,curr)=> {
       
-      return {...acc, [curr.yfirflokkar]: acc[curr.yfirflokkar].concat([{y: curr.heildarlaun, x:curr.grunnlaun}]) };
+      return {...acc, [curr.yfirflokkar]: acc[curr.yfirflokkar].concat([{y: curr.y, x:curr.x}]) };
     },dataHeildGrunnObject0);
 
     const dataHeildGrunnLabels = heildarGrunnData.reduce((acc,curr)=> {
@@ -126,7 +146,7 @@ class Card2 extends Component {
             pointHoverBorderWidth: 2,
             pointRadius: 10,
             pointHitRadius: 10,
-            data: [{y: d[artal][kennarar_nr].heildarlaun.medaltal, x: d[artal][kennarar_nr].grunnlaun.medaltal}]
+            data: [{y: d[artal][kennarar_nr][laun].medaltal, x: d['2014'][kennarar_nr][laun].medaltal}]
 
         }
       ])
@@ -135,7 +155,7 @@ class Card2 extends Component {
       <div>
       <div style={{padding: '1%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
         
-        <Artal change={this.changeAr} artal={artal}/>
+        
         <Flokkur flokkur={
           {
             "Störf stjórnenda": 1, 
@@ -148,10 +168,12 @@ class Card2 extends Component {
             "Ósérhæfð störf": 9,
           }
         } change={this.change}/>
-      
+        <Laun change={this.changeLaun} laun={laun} launaflokkar={launaflokkar}/>
+        
       </div>
       <div style={{padding: '2%'}}>
-        <h2>Heildarlaun (þús. krónur) á móti grunnlaunum (þús. krónur)</h2>
+
+        <h2>Laun/greiddar stundir</h2>
           <Scatter data={dataHeildGrunn} height={130} width={300} options={{
             tooltips: {
               callbacks: {
@@ -175,17 +197,16 @@ class Card2 extends Component {
               yAxes: [{
                 scaleLabel: {
                 display: true,
-                labelString: 'Meðaltal heildarlauna (þúsund kr.)'
+                labelString: `${launaflokkar[laun]} árið 2017 (meðaltal)`
                 }
               }],
               xAxes: [{
                 scaleLabel: {
                 display: true,
-                labelString: 'Meðaltal grunnlauna (þúsund kr.)'
+                labelString: `${launaflokkar[laun]} árið 2014 (meðaltal)`
                 }
               }]
             }     
-          
         }}/>
         </div>
         
@@ -194,4 +215,4 @@ class Card2 extends Component {
   }
 }
 
-export default Card2;
+export default Card5;

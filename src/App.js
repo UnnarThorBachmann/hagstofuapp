@@ -3,6 +3,8 @@ import Card1 from './components/Card1.js';
 import Card2 from './components/Card2.js';
 import Card3 from './components/Card3.js';
 import Card4 from './components/Card4.js';
+import Card5 from './components/Card5.js';
+
 import Bar from './components/Bar.js';
 
 import {Route} from 'react-router-dom';
@@ -49,7 +51,7 @@ class App extends Component {
                   <ListItem button>
                     <ListItemText
                       primary="Samanburður 2"
-                      secondary="Laun eftir starfsstétt, launþegahópi og kyni."
+                      secondary="Laun fullvinnandi launamanna eftir starfi. Heildarlaun á móti grunnlaunum"
                     />
                   </ListItem>
                 </Link>
@@ -57,7 +59,8 @@ class App extends Component {
                   <ListItem button>
                     <ListItemText
                       primary="Samanburður 3"
-                      secondary="Laun fullvinnandi launamanna eftir starfi. Heildarlaun á móti grunnlaunum."
+                      secondary="Laun eftir starfsstétt, launþegahópi og kyni."
+                      
                     />
                   </ListItem>
                 </Link>
@@ -66,6 +69,14 @@ class App extends Component {
                     <ListItemText
                       primary="Samanburður 4"
                       secondary="Laun eftir starfsstétt, launþegahópi og kyni. Heildarlaun á móti grunnlaunum."
+                    />
+                  </ListItem>
+                </Link>
+                <Link to={'/samanburdur5'}>
+                  <ListItem button>
+                    <ListItemText
+                      primary="Samanburður 5"
+                      secondary="Launamunur fullvinnandi launamanna milli 2014 og 2017"
                     />
                   </ListItem>
                 </Link>
@@ -94,6 +105,12 @@ class App extends Component {
              <div style={{width: '100%'}}>
             <Bar/>
             <Card4/>
+            </div>
+        )}/>
+        <Route exact path="/samanburdur5" render ={() => (
+           <div style={{width: '100%'}}>
+            <Bar/>
+            <Card5/>
             </div>
         )}/>
         
